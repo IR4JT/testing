@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Gallery Portfolio</title>
+    <style>
+        /* --- GENERAL SETUP --- */
+        :root {
+            --wall-color: #2c2c2c; /* Dark Charcoal Wall */
+            --floor-color: #1a1a1a;
+            --frame-gold: #d4af37;
+            --frame-shadow: 10px 15px 30px rgba(0,0,0,0.6);
+            --spotlight: rgba(255, 255, 255, 0.05);
+            --text-color: #f0f0f0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--wall-color);
+            color: var(--text-color);
+            font-family: 'Georgia', serif; /* Serif looks more "Museum" */
+            overflow-x: hidden;
+        }
+
+        /* --- THE HEADER --- */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4), transparent);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px black;
+        }
+
+        p.subtitle {
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* --- THE GALLERY GRID --- */
+        .gallery-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 60px; /* Space between paintings */
+            padding: 50px 20px 100px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- FRAMES & ARTWORK --- */
+        .frame-container {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .frame {
+            position: relative;
+            background: #fff;
+            border: 15px solid #5c4033; /* Wood texture base */
+            outline: 5px solid var(--frame-gold); /* Gold accent */
+            box-shadow: var(--frame-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            width: 300px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .frame:hover {
+            transform: scale(1.02) translateY(-5px);
+            box-shadow: 15px 25px 40px rgba(0,0,0,0.8);
+            z-index: 10;
+        }
+
+        /* The actual project image placeholder */
+        .art-piece {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.9); /* Slightly dim until hover */
+            transition: filter 0.3s;
+        }
+
+        .frame:hover .art-piece {
+            filter: brightness(1.1); /* Spotlight effect */
+        }
+
+        /* The "Plaque" (Title & Desc) */
+        .plaque {
+            background-color: #e0e0e0;
+            color: #111;
+            width: 200px;
+            padding: 10px;
+            margin: 15px auto 0 auto;
+            text-align: center;
+            font-family: sans-serif;
+            font-size: 0.8rem;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            border-radius: 2px;
+        }
+
+        .plaque h3 { margin: 0 0 5px 0; font-size: 1rem; }
+
+        /* --- THE LIVE CLOCK (Styled as Art) --- */
+        .clock-frame {
+            border-color: #222; /* Minimalist modern frame */
+            outline: 2px solid #555;
+            background: #000;
+            color: #0f0; /* Retro digital look or matrix style */
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #clock-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px #0f0;
+        }
+        
+        #date-display {
+            font-size: 1rem;
+            color: #aaa;
+            margin-top: 10px;
+        }
+
+        /* --- THE GUESTBOOK (Contact Form) --- */
+        .guestbook-section {
+            background-color: #f4f1ea; /* Paper color */
+            color: #333;
+            max-width: 600px;
+            margin: 50px auto 100px auto;
+            padding: 40px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            position: relative;
+            transform: rotate(-1deg); /* Slight tilt like a messy desk */
+        }
+
+        /* Tape effect on the guestbook */
+        .tape {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 30px;
+            background-color: rgba(255,255,255,0.6);
+            border-left: 1px dashed rgba(0,0,0,0.1);
+            border-right: 1px dashed rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-family: sans-serif;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #999;
+            background: transparent;
+            border-bottom: 2px solid #333;
+            font-family: 'Courier New', monospace;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>The Collection</h1>
+        <p class="subtitle">Curated works by [Your Name]</p>
+    </header>
+
+    <div class="gallery-container">
+        
+        <div class="frame-container">
+            <div class="frame clock-frame">
+                <div id="clock-display">00:00:00</div>
+                <div id="date-display">Loading...</div>
+            </div>
+            <div class="plaque">
+                <h3>Current Timeline</h3>
+                <p>Digital Installation</p>
+            </div>
+        </div>
+
+        <div class="frame-container">
+            <div class="frame">
+                <img src="https://placehold.co/600x400/222/FFF?text=Project+1" alt="Project 1" class="art-piece">
+            </div>
+            <div class="plaque">
+                <h3>UX Case Study</h3>
+                <p>Oil on Canvas (Figma)</p>
+            </div>
+        </div>
+
+        <div class="frame-container">
+            <div class="frame">
+                <img src="https://placehold.co/600x400/444/FFF?text=Project+2" alt="Project 2" class="art-piece">
+            </div>
+            <div class="plaque">
+                <h3>Mobile App Design</h3>
+                <p>Mixed Media</p>
+            </div>
+        </div>
+
+        <div class="frame-container">
+            <div class="frame">
+                <img src="https://placehold.co/600x400/666/FFF?text=Project+3" alt="Project 3" class="art-piece">
+            </div>
+            <div class="plaque">
+                <h3>Web Development</h3>
+                <p>Digital Structure</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="guestbook-section">
+        <div class="tape"></div>
+        <h2 style="margin-top:0; font-family: sans-serif;">Visitor Guestbook</h2>
+        <p>Leave a note for the artist.</p>
+        
+        <form action="#" method="POST"> <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Who is visiting?" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="How can I write back?" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="4" placeholder="Your thoughts on the exhibition..." required></textarea>
+            </div>
+            <button type="submit">Sign Guestbook</button>
+        </form>
+    </div>
+
+    <script>
+        // --- LIVE CLOCK LOGIC ---
+        function updateClock() {
+            const now = new Date();
+            
+            // 1. Get Time
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            // Convert to 12-hour format
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+
+            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+            
+            // 2. Get Date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = now.toLocaleDateString(undefined, options);
+
+            // 3. Update HTML
+            document.getElementById('clock-display').innerText = timeString;
+            document.getElementById('date-display').innerText = dateString;
+        }
+
+        // Run immediately, then update every second
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
